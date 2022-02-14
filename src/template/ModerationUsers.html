@@ -1,0 +1,19 @@
+{{ template "main" . }} {{ define "body" }}
+<div class="container">
+    <h1 class="mt-4" style="text-align: center;"><i class="fas fa-angle-double-right"></i> Panneau de contrôle des users <i class="fas fa-angle-double-left"></i></h1><br>
+    <div class="row row-cols-3 g-3">
+        {{ range $user := .All_User }}
+        <div class="col d-flex justify-content-center align-items-center text-center">
+            <div class="card" style="width: 18rem; height: 100%;"  style="max-widht: 50%; max-height: auto;">
+                <img src="{{ $user.Image }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $user.UserName}}</h5>
+                    <p class="card-text">{{ $user.Description }}</p>
+                </div>
+                <a href="/profil?ID={{$user.ID}}" type="button" class="btn btn-outline-secondary">Accèder au profil</a>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

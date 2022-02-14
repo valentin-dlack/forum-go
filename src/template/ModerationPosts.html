@@ -1,0 +1,60 @@
+{{ template "main" . }} {{ define "body" }}
+<form method="POST">
+<div class="container">
+    <h1 class="mt-4" style="text-align: center;"><i class="fas fa-angle-double-right"></i> Panneau de contrôle des posts <i class="fas fa-angle-double-left"></i></h1>
+    <div class="row row-cols-1 g-3 mt-3" style="margin: 0px 100px">
+        {{ range $post := .All_Posts }}
+            <div class="col">
+                <div class="card positon-relative card-co">
+                    <div class="card-body" style="padding-bottom:1%;padding-right: 1%;">
+                        <a type="button" href="/post?id={{ $post.ID }}" class="btn btn-outline-dark" style="float:right; margin-left: 1%;"><i class="fas fa-external-link-alt"></i></a>
+
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$post.ID}}" style="float:right"><i class="far fa-trash-alt"></i></button>
+
+                        <h5 class="card-title">{{$post.Title}}</h5>{{ range $categories := $post.Categories }}
+                            <i type="submit" name="{{ $categories.Cat }}" value="{{ $categories.Cat }}" class="badge rounded-pill" style="background-color:{{ $categories.Color }};">{{ $categories.Cat }}</i> 
+                            {{ end }}
+
+                        <p class="card-text text-truncate">{{$post.Body}}</i>
+                        {{ if $post.Image }}
+                            <div class="col-6">
+                                <img src="{{ $post.Image }}" style="max-width: 20%;max-height: 20%;">
+                            </div>
+                        {{ end }}</p>
+                        <div style="font-size:10px;float:right;"><i class="far fa-comment-alt"></i> {{ $post.Comment_Nb}} - ❤️ {{ $post.Likes}} - <img src="{{ $post.Post_User_Info.Image }}" style="float:right;border-radius: 100%;height:15px;width:15px; margin-left: 5px;"> </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal{{$post.ID}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirmation de suppression.</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Êtes-vous sûr de vouloir supprimer le post "{{$post.Title}}" ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" name="deleteButton" onclick="submit()" value="{{ $post.ID }}"  class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{end}}
+    </div>
+</div>
+</form>
+
+<!-- Modal script -->
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function() {
+        myInput.focus()
+    })
+</script>
+{{ end }}

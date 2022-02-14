@@ -1,0 +1,108 @@
+ete{{ define "main" }}
+<!DOCTYPE html>
+
+<head>
+    <title>Forum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/stylesheet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="/">Forüm</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active text-white" aria-current="page" href="/home">Acceuil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/posts">Posts</a>
+                        </li>
+                    </ul>
+                    {{ if .Self_User_Info.Admin}}
+                    <li class="nav-item dropdown d-flex" style="margin-right: 1%;">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-shield-alt"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/adminuser" value="self">Contrôle des Profils</a></li>
+                            <li><a class="dropdown-item" href="/adminpost" value="self">Contrôle des Posts</a></li>
+                        </ul>
+                    </li>
+                    {{ end }} {{ if .Self_User_Info.Modo}}
+                    <li class="nav-item dropdown d-flex" style="margin-right: 1%;">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-shield-alt"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/adminuser" value="self">Contrôle des profils</a></li>
+                            <li><a class="dropdown-item" href="/adminpost" value="self">Contrôle des Posts</a></li>
+                        </ul>
+                    </li>
+                    {{ end }}
+                    <li class="nav-item dropdown d-flex" style="margin-right: 6%;">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             {{ if .Self_User_Info.Login }}
+                                <img width="25" height="25" style="border-radius: 50%;" src="{{ .Self_User_Info.Image }}" alt="Photo de profil">
+                            {{ else }}
+                            <i class="far fa-user"></i> 
+                            {{ end }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {{ if .Self_User_Info.Login}}
+                            <li><a class="dropdown-item" name="ID" href="/profil?ID=" value="self">Modifier le profil</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="POST" action="/login"><button type="submit" class="dropdown-item">Logout</button></form>
+                            </li>
+                            {{ else }}
+                            <li><a class="dropdown-item" href="/login">Sign In/Register</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/login">Modifier le profil</a></li>
+                            {{ end }}
+                        </ul>
+                    </li>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {{ template "body" .}} {{ if .Self_User_Info.Login }}
+    <a href="/newpost" class="float" style="color: inherit;">
+        <i class="fa fa-plus my-float"></i>
+    </a>
+    {{ end }}
+
+    <!--footer-->
+    <br>
+    <footer style="position: fixed; bottom: 0; width: 100%;" class="bg-dark text-center text-white">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            By DAUTREMENT, ABADIE, FERREIRA SILVA, REYPE
+            <br>
+            <a class="text-white" href="https://git.ytrack.learn.ynov.com/CREYPE/Forum.git">GITHUB</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+</body>
+
+
+{{ end }}

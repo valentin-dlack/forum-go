@@ -1,0 +1,228 @@
+ {{ template "main" . }} {{ define "body" }}
+
+<form method="POST" class="needs-validation" novalidate id="coucou">
+    <div class="border border-secondary container rounded-3 pl-2 pr-2 pb-2 mt-5">
+        <!-- CATEGORIE -->
+        <div class="dropdown">
+            <i class="fas fa-ellipsis-v mt-1" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="float:right; margin-left: 10px;"></i>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {{ if .Self_User_Info.Admin }}
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal" style="color:red">Supprimer le post</a>
+                <hr class="dropdown-divider"> 
+            {{ else if .Self_User_Info.Modo }}
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal" style="color:red">Supprimer le post</a>
+                <hr class="dropdown-divider"> 
+            {{ else if .Post_Info.Deletable }}
+                <a class="dropdown-item" href="/editpost?id={{ .Post_Info.ID }}">Modifier le post</a>
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal" style="color:red">Supprimer le post</a>
+                <hr class="dropdown-divider"> {{ end }}
+                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signalModal">Signaler</a>
+            </div>
+        </div>
+
+        <a style="float:right; text-decoration: none; color: inherit" name="ID" href="/profil?ID={{ .Post_Info.Post_User_Info.ID}}" value="{{ .Post_Info.Post_User_Info.ID}}">{{ .Post_Info.Post_User_Info.UserName }}</a>
+        <img src="{{ .Post_Info.Post_User_Info.Image }}" class="mx-1 mt-1" style="float:right;border-radius: 100%;height:25px;width:25px;">
+        <p style="float:right"> <input name="Liker" value="Liker" type="checkbox" id="checkbox" {{ .Currently_Post_Like }} onclick="submit()" />
+            
+            <label for="checkbox">
+        
+        <svg id="heart-svg" name="Like" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
+          <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
+            <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" id="heart" fill="#AAB8C2"/>
+            <circle id="main-circ" fill="#E2264D" opacity="0" cx="20.5" cy="20.5" r="1.5"/>
+
+            <g id="grp7" opacity="0" transform="translate(7 6)">
+              <circle id="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/>
+              <circle id="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/>
+            </g>
+
+            <g id="grp6" opacity="0" transform="translate(0 28)">
+              <circle id="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/>
+              <circle id="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/>
+            </g>
+
+            <g id="grp3" opacity="0" transform="translate(52 28)">
+              <circle id="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/>
+              <circle id="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/>
+            </g>
+
+            <g id="grp2" opacity="0" transform="translate(44 6)">
+              <circle id="oval2" fill="#CC8EF5" cx="5" cy="6" r="2"/>
+              <circle id="oval1" fill="#CC8EF5" cx="2" cy="2" r="2"/>
+            </g>
+
+            <g id="grp5" opacity="0" transform="translate(14 50)">
+              <circle id="oval1" fill="#91D2FA" cx="6" cy="5" r="2"/>
+              <circle id="oval2" fill="#91D2FA" cx="2" cy="2" r="2"/>
+            </g>
+
+            <g id="grp4" opacity="0" transform="translate(35 50)">
+              <circle id="oval1" fill="#F48EA7" cx="6" cy="5" r="2"/>
+              <circle id="oval2" fill="#F48EA7" cx="2" cy="2" r="2"/>
+            </g>
+
+            <g id="grp1" opacity="0" transform="translate(24)">
+              <circle id="oval1" fill="#9FC7FA" cx="2.5" cy="3" r="2"/>
+              <circle id="oval2" fill="#9FC7FA" cx="7.5" cy="2" r="2"/>
+            </g>
+          </g>
+        </svg>
+      </label> {{ .Post_Info.Likes}} | </p>
+
+        <h1>{{ .Post_Info.Title }}
+            <h6>
+                {{ range $cat := .Post_Info.Categories}}
+                <span class="badge rounded-pill" style="background-color:{{ $cat.Color }};">{{ $cat.Cat }}</span> {{ end }}
+            </h6>
+        </h1>
+        <div class="row">
+            {{ if .Post_Info.Image }}
+            <div class="col-6 mt-3">
+                <span style="white-space: pre-line;">{{ .Post_Info.Body }}</span>
+            </div>
+            <div class="col-6">
+                <img src="{{ .Post_Info.Image }}" style="max-width: 100%;height: auto;">
+            </div>
+            {{ else }}
+            <div class="col-9 mt-3">
+                <span style="white-space: pre-line;">{{ .Post_Info.Body }}</span>
+            </div>{{ end }}
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <input id='input' onkeyup='javascript:isCharSet()' type="text" name="comment" placeholder="Commentaire.." style="width: 89%;height:40px;border-radius: 10px;" required>
+        <button onclick="submit()" id='button' name="submitButton" value="Commenter" class="btn btn-outline-secondary">
+            <i class="fas fa-paper-plane">
+            </i>
+            Commenter
+        </button>
+    </div>
+</form>
+<br>
+<div class="container">
+    {{ if .Self_User_Info.Admin }}
+      {{ range $comment:= .Post_Info.All_Comments }}
+      <div class="row">
+          <div class="border rounded-3 col mt-1">
+            <button type="button" class="btn btn-danger mt-1" data-bs-toggle="modal" data-bs-target="#commentDeleteModal{{$comment.ID}}" style="float:right"><i class="far fa-trash-alt"></i></button>
+
+            <div class="text mt-2">
+                  <h6 class="float-start">{{ $comment.Body }}</h6>
+                  <a class="float-end mb-2" style="float:right; text-decoration: none; color: inherit" name="ID" href="/profil?ID={{ $comment.User_Info.ID}}" value="{{ $comment.User_Info.ID }}"> {{ $comment.User_Info.UserName}} </a>
+                  <img src="{{ $comment.User_Info.Image}}" class="mx-1" style="float:right;border-radius: 100%;height:25px;width:25px;">
+              </div>
+          </div>
+      </div>
+
+
+  <!-- Modal Supprimer Commentaire -->
+    <form method="POST">
+      <div class="modal fade" id="commentDeleteModal{{$comment.ID}}" tabindex="-1" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Confirmation de suppression.</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimer le commentaire "{{$comment.Body}}" ?
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                              <button type="submit" name="commentDeleteButton" onclick="submit()" value="{{ $comment.ID }}"  class="btn btn-danger">Supprimer</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      {{ end }}
+    {{ else }}
+      {{ range $comment:= .Post_Info.All_Comments }}
+        <div class="row">
+            <div class="border rounded-3 col mt-1">
+              <div class="text mt-2">
+                    <h6 class="float-start">{{ $comment.Body }}</h6>
+                    <a class="float-end mb-2" style="float:right; text-decoration: none; color: inherit" name="ID" href="/profil?ID={{ $comment.User_Info.ID}}" value="{{ $comment.User_Info.ID }}"> {{ $comment.User_Info.UserName}} </a>
+                    <img src="{{ $comment.User_Info.Image}}" class="mx-1" style="float:right;border-radius: 100%;height:25px;width:25px;">
+                </div>
+            </div>
+        </div>
+      {{ end }}
+    {{ end }}
+  </div>
+<!-- Delete Modal -->
+<form method="POST">
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirmation de suppression.</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Êtes-vous sûr de vouloir supprimer ce post ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" name="deleteButton" onclick="submit()" value="delete"  class="btn btn-danger">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<!-- Signal Modal -->
+<div class="modal fade" id="signalModal" tabindex="-1" aria-labelledby="signalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Signaler</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-form-label" for="inputDefault">Title:</label>
+                        <input type="text" class="form-control" name="SignalTitle" placeholder="Titre du post" id="inputDefault">
+                    </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">User:</label>
+                            <input class="form-control" name="SignalUser" placeholder="Qui a écrit ce post" id="message-text">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Autre Chose ?</label>
+                            <textarea class="form-control" name="SignalOther" id="message-text"></textarea>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+<!-- Modal script -->
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function() {
+        myInput.focus()
+    })
+</script>
+
+<script>
+let inputElt = document.getElementById('input');
+let btn = document.getElementById('button');
+btn.disabled = true;
+function isCharSet() {
+  if (inputElt.value != "") {
+    btn.disabled = false;
+  } else {
+    btn.disabled = true;
+  }  
+}
+</script>
+
+<script src="../assets/main.js"></script>
+{{ end }}

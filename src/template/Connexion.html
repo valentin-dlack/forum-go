@@ -1,0 +1,50 @@
+{{ template "main" . }} {{ define "body" }}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="margin-top: 60px;">
+            <h6 class="d-flex justify-content-center text-danger">{{ .Self_User_Info.Msg }}</h6>
+            <form class="row g-3 needs-validation" method="POST" novalidate>
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">Email</label>
+                    <input type="text" class="form-control" name="mail" placeholder="mail@example.com" id="validationCustom01" required>
+                    <div class="invalid-feedback">
+                        Mettez un email valide.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">Mot de passe</label>
+                    <input type="password" name="password" class="form-control" id="password" required>
+                    <div class="invalid-feedback">
+                        Vous devez mettre un mot de passe.
+                    </div>
+                </div>
+                <a href="/register" class="text-decoration-none d-flex justify-content-center mt-2" style="font-size: 12px;">Je n'ai pas de compte.</a>
+                <div class="col-12 d-flex justify-content-center">
+                    <button class="btn btn-outline-primary" type="submit">Se Connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    (function() {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation:not(.passwd)')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+{{end}}

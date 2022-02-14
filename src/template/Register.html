@@ -1,0 +1,100 @@
+{{ template "main" . }} {{ define "body" }}
+<!-- Modal HTML -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="margin-top: 60px;">
+            <h6 class="d-flex justify-content-center text-danger">{{ .Self_User_Info.Msg }}</h6>
+            <form class="row g-3 needs-validation" method="POST" novalidate>
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">Email</label>
+                    <input type="text" class="form-control" name="mail" id="validationCustom01" placeholder="example@mail.com" required>
+                    <div class="invalid-feedback">
+                        Mettez un email valide.
+                    </div>
+                    <div class="valid-feedback">
+                        Valide !
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustomUsername" class="form-label">Username</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" name="username" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback ">
+                            Mettez un nom d'utilisateur.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">Mot de passe</label>
+                    <input type="password" name="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-.]).{8,12}$" class="form-control" id="password" required>
+                    <div class="invalid-feedback">
+                        Le mot de passe doit faire au moins de 8 à 12 caractères de long, 1 majuscule, 1 minuscule, 1 chiffre et un caractère spécial.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">Confirmer le mot de passe</label>
+                    <input type="password" name="psw-confirmation" class="form-control" id="passwordConf" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-.]).{8,12}$" aria-describedby="passwordHelpBlock" required>
+                    <div id="passwordHelpBlock" class="form-text">
+                        Les deux mots de passes doivent être les même.
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a valid password.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom04" class="form-label">Pays :</label>
+                    
+                    <select name="country" class="form-select" id="validationCustom04" required>
+                    <option selected disabled value="">Choose...</option>
+                    {{ range $Pays:= .All_Country}}
+                            <option value="{{ $Pays }}">{{ $Pays }}</option>
+                    {{ end }}
+                    
+                    </select>
+                    <div class="invalid-feedback">
+                        Veuillez selectionner un pays.
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value=" " id="invalidCheck" required>
+                        <label class="form-check-label" for="invalidCheck">
+                      Accepter les conditions d'utilisation
+                    </label>
+                        <div class="invalid-feedback">
+                            Vous devez accepter pour vous enregistrer
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-outline-primary" type="submit">Créer un compte</button>
+                </div>
+            </form>
+            <a href="/login" class="text-decoration-none d-flex justify-content-center" style="font-size: 12px;">J'ai déjà un compte.</a>
+        </div>
+    </div>
+</div>
+<script>
+    (function() {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation:not(.passwd)')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+{{end}}

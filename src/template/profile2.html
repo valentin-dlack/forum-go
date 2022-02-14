@@ -1,0 +1,180 @@
+{{ template "main" . }} {{ define "body" }} 
+  <!-- Modal -->
+  <script>
+    var myModal = document.getElementById('myModal')
+  var myInput = document.getElementById('myInput')
+  
+  myModal.addEventListener('shown.bs.modal', function () {
+    myInput.focus()
+  })
+   </script>
+  <form method="POST">
+    <div class="media-body mb-5 text-black">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="col-form-label"  for="inputDefault">Username:</label>
+              <input type="text" class="form-control" name="Username" placeholder="Bah faut écrire ici enculé" id="inputDefault">
+            </div>
+            <form>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Description:</label>
+              <textarea class="form-control" name="Description" id="message-text"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label for="validationCustom04" class="form-label">Pays :</label>
+              <select name="country" class="form-select" id="validationCustom04">
+              <option selected disabled value="">Choose...</option>
+            {{ range $Pays:= .All_Country}}
+                <option value="{{ $Pays }}">{{ $Pays }}</option>
+              {{ end }}
+            </select>
+              <div class="invalid-feedback">
+                  Veuillez selectionner un pays.
+              </div>
+          </div>
+            <div class="drop-zone w-75">
+              <span class="drop-zone__prompt">Drop files here or click to upload</span>
+              <!-- <div class="drop-zone__thumb" data-label="myfile.txt"></div> -->
+              <input type="file" name="myFile" class="drop-zone__input">
+            </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </form>
+<div class="container-fluid">
+  <div class="row py-10 px-7">
+    <div class="col-sm-2 mx-auto align-self-center">
+        <!-- Profile widget -->
+        <!-- <div class="bg-white shadow rounded overflow-hidden" style="float: left;">
+            <div class="px-4 pt-0 pb-4 cover">
+                <div class="media align-items-end profile-head">
+                    <div class="profile mr-3"><img src="" alt="..." width="130" class="rounded mb-2 img-thumbnail">
+                        <a href="#" class="btn btn-outline-white btn-sm btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Profile</a></div>
+                    <div class="media-body mb-5 text-white">
+                        <h4 class="mt-0 mb-0">{{ .User_Info.UserName }}</h4>
+                        <p class="small mb-4"> <i class="fas fa-map-marker-alt mr-2"></i>{{ .User_Info.Country }}</p>
+                    </div>d
+                </div>
+            </div>
+            <div class="bg-light p-4 d-flex justify-content-end text-center">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">0</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Posts</small>
+                    </li>
+  
+                </ul>
+            </div>
+            <div class="px-4 py-3">
+                <h5 class="mb-0">About</h5>
+                <div class="p-4 rounded shadow-sm bg-light">
+                    <p class="font-italic mb-0">Golang Developer</p>
+                    <p class="font-italic mb-0">Lives in Bordeaux</p>
+                    <p class="font-italic mb-0">Costa a plein temps</p>
+                </div>
+            </div>
+        </div> -->
+        <div class="card" style="width: 18rem; float: left;">
+            <img src="{{ .User_Info.Image }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ .User_Info.UserName }}</h5>
+              <p class="card-text">{{ .User_Info.Description }}</p>
+              <a href="#" class="btn btn-outline-white btn-sm btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Profile</a>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm-5 mx-auto align-self-center">
+        <!-- <div class="py-4 px-4" style="float: right;">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="mb-0">Recent Post</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                {{ range $post := .User_Info.AllPosts}}
+                  <li class="list-inline-item">
+                        {{ $post.Title }}
+
+                        <div class="row">
+                        {{ if $post.Image }}
+                        <div class="col-6 mt-3 text-truncate" style="max-width: 150px;">
+                            <span>{{ $post.Body }}</span>
+                        </div>
+                        <div class="col-6">
+                            <img src="{{ $post.Image }}" style="max-width: 100%;height: auto;">
+                        </div>
+                        {{ else }}
+                        <div class="col-9 mt-3 text-truncate" style="max-width: 150px;">
+                            <span>{{ $post.Body }}</span>
+                        </div>{{ end }}
+                      </div>
+                    </li>
+                {{ end }}
+            </div>
+        </div> -->
+        <div class="row row-cols-1 g-4">
+          {{ range $post := .User_Info.AllPosts }}
+        <h4>Dernier post</h4>
+        <div class="col">
+            <div class="bg-light">
+                <a href="/post?id={{ $post.ID }}" class="custom-card">
+                    <div class="card positon-relative card-c">
+                        <div class="card-body" style="padding-bottom:1%;padding-right: 1%;">
+                            <h5 class="card-title">{{$post.Title}}</h5>
+                            <p class="card-text text-truncate">{{ $post.Body }}</p>
+                            <div style="font-size:10px;float:right;"><i class="far fa-comment-dots"></i> {{ $post.Comment_Nb}} - ❤️ {{ $post.Likes}} -  <img src="{{ $post.Post_User_Info.Image }}" style="float:right;border-radius: 100%;height:15px;width:15px; margin-left: 5px;"> </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {{ end }}
+          
+        </div>
+    </div>
+    <div class="col-sm-4">
+      <h4>Dernier Post</h4>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text text-truncate" style="max-width: 150px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+      </div>
+      <br>
+      <h4>Dernier Like</h4>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text text-truncate" style="max-width: 150px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <button type="button" class="btn btn-danger">
+            <i class="far fa-heart"></i>
+            Like
+          </button>
+        </div>
+        
+      </div>
+      <br>
+      <h4>Dernier Commentaire</h4>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text text-truncate" style="max-width: 150px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/main.js"></script>
+
+
+{{ end }}

@@ -1,0 +1,65 @@
+{{ template "main" . }} {{ define "body" }}
+<div class="container">
+    <h2 class="d-flex justify-content-center mt-2">Modifier ce post :</h2>
+    <div class="border border-secondary container rounded-3 pl-2 pr-2 pb-2 mt-5">
+        <div class="container">
+            <div class="row">
+                <h6 class="d-flex justify-content-center text-danger">{{.Self_User_Info.Msg}}</h6>
+                
+                <form class="row needs-validation" method="POST" novalidate>
+                    <div class="dropdown" style="float: right;">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="float: right;">
+                            Catégories
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {{ range $categorie:= .Post_Info.AllCategories}}
+                                <div><input type="checkbox" id="test" name="{{ $categorie.Cat }}" value="{{ $categorie.Cat }}" style="text-align: left; margin-left: 5%;" {{ $categorie.Check}}> {{ $categorie.Cat }}</div>
+                            {{ end }}
+                        </div>
+                    </div>
+                    <input type="text" style="float: left;" class="form-control w-25" name="title" value="{{ .Post_Info.Title}}" id="validationCustom01" required>
+                    <div class="invalid-feedback" style="float: left;">
+                        Veuillez mettre un titre.
+                    </div>
+                    <label for="validationTextarea" class="form-label mt-2" style="float: left;"></label>
+                    <textarea class="form-control w-75" id="validationTextarea" name="body" value="{{ .Post_Info.Body}}" style="resize: none; float: left;" cols="2" rows="13" required>{{ .Post_Info.Body}}</textarea>
+                    <div class="invalid-feedback" style="float: left;">
+                        Veuillez entrer le contenu de votre post.
+                    </div>
+                    <div class="drop-zone w-25" style="float: right;">
+                        <span class="drop-zone__prompt">Drop files here or click to upload</span>
+                        <!-- <div class="drop-zone__thumb" data-label="myfile.txt"></div> -->
+                        <input type="file" name="myFile" class="drop-zone__input">
+                    </div>
+                    <div class="col-12 mt-3">
+                        <a class="btn btn-outline-danger" href="/post?id={{ .Post_Info.ID }}" style="float: left;">Annuler</a>
+                        <button class="btn btn-outline-success" type="submit" style="float: right;">Publier le post modifier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/main.js"></script>
+    <script>
+        (function() {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation:not(.passwd)')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</div>
+{{ end }}
